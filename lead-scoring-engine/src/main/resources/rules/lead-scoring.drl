@@ -1,0 +1,79 @@
+package com.leadscoring;
+
+import com.leadscoring.Lead;
+import com.leadscoring.ScoreResult;
+
+rule "Cargo Diretor ou CEO"
+when
+    $lead : Lead(cargo == "diretor" || cargo == "ceo")
+    $result : ScoreResult()
+then
+    $result.adicionarPontos(30);
+    $result.adicionarCriterio("Cargo de alto nível: +30 pontos");
+end
+
+rule "Cargo Gerente"
+when
+    $lead : Lead(cargo == "gerente")
+    $result : ScoreResult()
+then
+    $result.adicionarPontos(20);
+    $result.adicionarCriterio("Cargo gerencial: +20 pontos");
+end
+
+rule "Setor de Tecnologia"
+when
+    $lead : Lead(setor == "tecnologia")
+    $result : ScoreResult()
+then
+    $result.adicionarPontos(20);
+    $result.adicionarCriterio("Setor tech: +20 pontos");
+end
+
+rule "Origem LinkedIn"
+when
+    $lead : Lead(origemCampanha == "linkedin")
+    $result : ScoreResult()
+then
+    $result.adicionarPontos(15);
+    $result.adicionarCriterio("Origem LinkedIn: +15 pontos");
+end
+
+rule "Visitou Pagina"
+when
+    $lead : Lead(visitouPagina == true)
+    $result : ScoreResult()
+then
+    $result.adicionarPontos(10);
+    $result.adicionarCriterio("Visitou pagina: +10 pontos");
+end
+
+rule "Baixou Material"
+when
+    $lead : Lead(baixouMaterial == true)
+    $result : ScoreResult()
+then
+    $result.adicionarPontos(25);
+    $result.adicionarCriterio("Baixou material: +25 pontos");
+end
+
+rule "Classificacao Hot"
+when
+    $result : ScoreResult(score >= 70)
+then
+    $result.setClassificacao("HOT");
+end
+
+rule "Classificacao Warm"
+when
+    $result : ScoreResult(score >= 40 && score < 70)
+then
+    $result.setClassificacao("WARM");
+end
+
+rule "Classificacao Cold"
+when
+    $result : ScoreResult(score < 40)
+then
+    $result.setClassificacao("COLD");
+end
